@@ -189,16 +189,20 @@ mroute_extract_in_addr_t (struct mroute_addr *dest, const in_addr_t src)
   dest->type = MR_ADDR_IPV4;
   dest->netbits = 0;
   dest->len = 4;
-  *(in_addr_t*)dest->addr = htonl (src);
+  in_addr_t tmp_addr = htonl (src);
+  memcpy(dest->addr, &tmp_addr, sizeof(uint32_t));
 }
 
 static inline in_addr_t
 in_addr_t_from_mroute_addr (const struct mroute_addr *addr)
 {
-  if ((addr->type & MR_ADDR_MASK) == MR_ADDR_IPV4 && addr->netbits == 0 && addr->len == 4)
-    return ntohl(*(in_addr_t*)addr->addr);
-  else
+  if ((addr->type & MR_ADDR_MASK) == MR_ADDR_IPV4 && addr->netbits == 0 && addr->len == 4) {
+    in_addr_t tmp = 0;
+    memcpy(&tmp, addr->addr, sizeof(tmp));
+    return ntohl(tmp);
+  } else {
     return 0;
+  }
 }
 
 static inline void
