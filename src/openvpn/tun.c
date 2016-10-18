@@ -1605,7 +1605,6 @@ open_tun (const char *dev, const char *dev_type, const char *dev_node, struct tu
 {
 #define ANDROID_TUNNAME "vpnservice-tun"
   int i;
-  struct user_pass up;
   struct gc_arena gc = gc_new ();
   bool opentun;
 
